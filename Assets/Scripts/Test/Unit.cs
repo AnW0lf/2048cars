@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class Unit : MonoBehaviour
 {
@@ -9,10 +10,21 @@ public class Unit : MonoBehaviour
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _pushSpeed;
 
-    public int Cost { get; set; }
+    public int Cost
+    {
+        get => _cost;
+        set
+        {
+            _cost = value;
+            onCostChanged?.Invoke(_cost);
+        }
+    }
     public int Distance { get; set; }
 
     private Coroutine _move = null;
+    private int _cost;
+
+    public UnityAction<int> onCostChanged = null;
 
     public void MoveTo(Vector3 pos, MoveMode mode)
     {
@@ -95,6 +107,14 @@ public class Unit : MonoBehaviour
     {
         onEndScrolling = null;
         onEndMove = null;
+        onCostChanged = null;
+    }
+
+    private void OnDestroy()
+    {
+        onEndScrolling = null;
+        onEndMove = null;
+        onCostChanged = null;
     }
 }
 
