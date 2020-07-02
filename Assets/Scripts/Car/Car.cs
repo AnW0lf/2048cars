@@ -7,7 +7,7 @@ using UnityEngine.Events;
 namespace Field
 {
 
-    public class Car : MonoBehaviour, ICell
+    public class Car : MonoBehaviour
     {
         [SerializeField] private float scrollSpeed;
         [SerializeField] private float moveSpeed;
@@ -17,6 +17,9 @@ namespace Field
         public MoveState State { get; set; }
         public int Distance { get; set; }
         public UnityAction onEndMove { get; set; } = null;
+
+        public Point Top { get; set; }
+        public Point Bot { get; set; }
 
         private Coroutine _moveCoroutine = null;
 
@@ -78,16 +81,6 @@ namespace Field
                     string.Format("switch/case does not contains implementation for enum \'MoveState\' value {0}.", State));
             }
         }
-    }
-
-    public interface ICell
-    {
-        bool IsMovable { get; }
-        MoveState State { get; set; }
-        int Distance { get; set; }
-        void MoveTo(Vector3 pos);
-        void SetPosition(Vector3 pos);
-        UnityAction onEndMove { get; set; }
     }
 
     public enum MoveState { STOP = 0, SCROLL = 1, MOVE = 2, PUSH = 3 }

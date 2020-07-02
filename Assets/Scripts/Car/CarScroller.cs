@@ -8,11 +8,12 @@ namespace Field
 {
     public class CarScroller : MonoBehaviour
     {
-        private static readonly Point min = new Point(3, 1);
-        private static readonly Point max = new Point(8, 1);
+        private static readonly Point min = new Point(2, 1);
+        private static readonly Point max = new Point(7, 1);
 
         private Point current;
         private GameField field;
+        private Car car;
 
         public UnityAction<Point> onEndScrolling = null;
 
@@ -20,6 +21,7 @@ namespace Field
         {
             field = FindObjectOfType<GameField>();
             if (field == null) throw new ArgumentException("\'CarScroller\' can not find GameObject with component \'GameField\'.");
+            car = GetComponent<Car>();
         }
 
         private void OnMouseDown()
@@ -30,13 +32,13 @@ namespace Field
 
         private void OnMouseDrag()
         {
-            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + Vector3.left;
             Point point = GameField.Vector3ToPoint(worldPosition);
             point = Point.Clamp(point, min, max);
 
             if (point != current)
             {
-                field.ScrollCar(current, point);
+                field.ScrollCar(car, point);
                 current = point;
             }
 
