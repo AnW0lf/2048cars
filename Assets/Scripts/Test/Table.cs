@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 
 public class Table : MonoBehaviour
 {
+    //[SerializeField] private bool _alternativeMergeMode = false;
     [SerializeField] private GameObject _unitPrefab = null;
     [Space(20)]
     [SerializeField] private int _minCost = 1;
@@ -15,6 +16,11 @@ public class Table : MonoBehaviour
     private int size = 10;
     private int turnCounter = 0;
     private Unit[,] cells;
+
+    public UnityAction<Unit> OnUnitInstantiated { get; set; } = null;
+    public UnityAction<Unit> OnUnitScrolled { get; set; } = null;
+    public UnityAction<Unit> OnUnitLaunched { get; set; } = null;
+    public UnityAction OnGameOver { get; set; } = null;
 
     public int Size
     {
@@ -119,11 +125,15 @@ public class Table : MonoBehaviour
         unit.onEndScrolling += MoveUnit;
         unit.Cost = Random.Range(_minCost, _maxCost + 1);
         unit.Distance = Random.Range(2, 7);
+
+        OnUnitInstantiated?.Invoke(unit);
     }
 
     private void MoveUnit(Point point)
     {
         Unit unit = this[point];
+
+        OnUnitLaunched?.Invoke(unit);
 
         unit.onEndMove = null;
         Point secondPoint = SearchUnitSecondPart(point);
@@ -230,7 +240,7 @@ public class Table : MonoBehaviour
             {
                 bool leftMerged = MergeUnits(unit, leftAnother);
                 bool rightMerged = MergeUnits(unit, rightAnother);
-                leftMerged = MergeUnits(unit, leftAnother);
+                if (!leftMerged) leftMerged = MergeUnits(unit, leftAnother);
 
                 if (leftMerged && rightMerged) return true;
                 else if (leftMerged) return CheckPushAnotherUnit(rightAnother);
@@ -248,7 +258,7 @@ public class Table : MonoBehaviour
     private void PushAnotherUnit(Unit unit)
     {
         Point first = GetFirstPoint(unit), second = GetSecondPoint(unit);
-
+        if (first is null || second is null) return;
         if (Math.Max(first.Y, second.Y) >= 7) return;
 
         if (first.X == second.X)
@@ -313,6 +323,19 @@ public class Table : MonoBehaviour
             first.GetInstanceID() == second.GetInstanceID() ||
             first.Cost != second.Cost) return false;
 
+        //if (_alternativeMergeMode)
+        //{
+        //    Point firstPoint = GetFirstPoint(first),
+        //        secondPoint = GetSecondPoint(first);
+
+        //    this[firstPoint] = null;
+        //    this[secondPoint] = null;
+        //    Destroy(first.gameObject);
+        //    first.Cost++;
+        //    return true;
+        //}
+        //else
+        //{
         Point firstPoint = GetFirstPoint(second),
             secondPoint = GetSecondPoint(second);
 
@@ -321,15 +344,39 @@ public class Table : MonoBehaviour
         Destroy(second.gameObject);
         first.Cost++;
         return true;
+        //}
     }
 
     private void Next(Point point)
     {
-        this[point].onEndMove = null;
-        StartCoroutine(Rotate(InstantiateUnit));
+        if (GameOver)
+        {
+            //TODO
+            OnGameOver?.Invoke();
+        }
+        else
+        {
+            this[point].onEndMove = null;
+            StartCoroutine(Rotate(InstantiateUnit));
+        }
     }
 
-    private Point GetFirstPoint(Unit unit)
+    private bool GameOver
+    {
+        get
+        {
+            for(int i = 0; i < cells.Length; i++)
+            {
+                int x = i % size, y = i / size;
+                if (this[x, y] != null && (x < 2 || x > 7 || y < 2 || y > 7))
+                    return true;
+            }
+            return false;
+        }
+    }
+
+
+    public Point GetFirstPoint(Unit unit)
     {
         for (int i = 0; i < cells.Length; i++)
         {
@@ -345,7 +392,7 @@ public class Table : MonoBehaviour
         return null;
     }
 
-    private Point GetSecondPoint(Unit unit)
+    public Point GetSecondPoint(Unit unit)
     {
         for (int i = 0; i < cells.Length; i++)
         {
@@ -390,6 +437,8 @@ public class Table : MonoBehaviour
         this[newPoint + Point.down] = unit;
 
         unit.MoveTo(PointToVector3(newPoint), MoveMode.SCROLL);
+
+        OnUnitScrolled?.Invoke(unit);
     }
 
     #endregion GameLogic
