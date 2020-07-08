@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scrollSpeed: 20
-  _moveSpeed: 10
+  _moveSpeed: 15
   _pushSpeed: 5
 --- !u!114 &7419400731348350509
 MonoBehaviour:
