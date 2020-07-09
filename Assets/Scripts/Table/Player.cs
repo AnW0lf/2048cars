@@ -54,7 +54,7 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null) Destroy(gameObject);
+        if (Instance != null && Instance != this) Destroy(gameObject);
         else Instance = this;
 
         if (Level == 0) Level = 1;

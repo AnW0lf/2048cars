@@ -5,48 +5,46 @@ using UnityEngine;
 
 public class CellLightning : MonoBehaviour
 {
-    [SerializeField] private Table _table;
     [SerializeField] private Color _selectedRow, _selectedCell;
     [SerializeField] private SpriteRenderer[] _cells;
 
-    private int _size = 6;
-    private int Size { get => _table.Size; }
-    private int TableSize { get => _table.TableSize; }
+    private int TableSize { get => GameLogic.Instance.TableSize; }
+    private int FieldSize { get => GameLogic.Instance.FieldSize; }
 
     private void OnEnable()
     {
-        _table.OnUnitInstantiated += SetLight;
-        _table.OnUnitScrolled += SetLight;
-        _table.OnUnitLaunched += LightOff;
+        GameLogic.Instance.OnUnitInstantiated += SetLight;
+        GameLogic.Instance.OnUnitScrolled += SetLight;
+        GameLogic.Instance.OnUnitLaunched += LightOff;
     }
 
     private void OnDisable()
     {
-        _table.OnUnitInstantiated -= SetLight;
-        _table.OnUnitScrolled -= SetLight;
-        _table.OnUnitScrolled -= LightOff;
+        GameLogic.Instance.OnUnitInstantiated -= SetLight;
+        GameLogic.Instance.OnUnitScrolled -= SetLight;
+        GameLogic.Instance.OnUnitScrolled -= LightOff;
     }
 
     private void SetLight(Unit unit)
     {
         LightOff();
 
-        int tableOffset = ((Size - TableSize) / 2);
-        int selectedX = _table.GetFirstPoint(unit).X - tableOffset;
+        int tableOffset = ((TableSize - FieldSize) / 2);
+        int selectedX = GameLogic.Instance.GetFirstPoint(unit).X - tableOffset;
         int selectedY1 = unit.Distance - tableOffset + 1, selectedY2 = unit.Distance - tableOffset;
 
-        for(int i = 0; i < _size; i++)
+        for(int i = 0; i < FieldSize; i++)
         {
-            int id = i + selectedY1 * _size;
+            int id = i + selectedY1 * FieldSize;
             _cells[id].enabled = true;
             _cells[id].color = _selectedRow;
-            id = i + selectedY2 * _size;
+            id = i + selectedY2 * FieldSize;
             _cells[id].enabled = true;
             _cells[id].color = _selectedRow;
         }
 
-        _cells[selectedX + selectedY1 * _size].color = _selectedCell;
-        _cells[selectedX + selectedY2 * _size].color = _selectedCell;
+        _cells[selectedX + selectedY1 * FieldSize].color = _selectedCell;
+        _cells[selectedX + selectedY2 * FieldSize].color = _selectedCell;
     }
 
     private void LightOff()

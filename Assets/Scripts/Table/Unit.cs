@@ -60,15 +60,24 @@ public class Unit : MonoBehaviour
         }
 
         _move = null;
-        onEndMove?.Invoke(_table.Vector3ToPoint(end));
+        onEndMove?.Invoke(TargetTable.Vector3ToPoint(end));
     }
 
     private Point min;
     private Point max;
 
     private Point _current;
-    private Table _table;
-    public Table TargetTable { get => _table; }
+
+    private Table _targetTable;
+    public Table TargetTable
+    {
+        get => _targetTable;
+        set
+        {
+            _targetTable = value;
+            Init();
+        }
+    }
 
     public UnityAction<Point> onEndScrolling = null, onEndMove = null;
 
@@ -79,32 +88,29 @@ public class Unit : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnEnable()
+    private void Init()
     {
-        _table = FindObjectOfType<Table>();
-        if (_table == null) throw new ArgumentException("\'Unit\' can not find GameObject with component \'Table\'.");
-
-        int minCoordinate = (_table.Size - _table.TableSize) / 2;
-        int maxCoordinate = (_table.Size + _table.TableSize) / 2 - 1;
+        int minCoordinate = (TargetTable.TableSize - TargetTable.FieldSize) / 2;
+        int maxCoordinate = (TargetTable.TableSize + TargetTable.FieldSize) / 2 - 1;
         min = new Point(minCoordinate, 1);
         max = new Point(maxCoordinate, 1);
     }
 
     private void OnMouseDown()
     {
-        _current = _table.Vector3ToPoint(transform.position);
+        _current = TargetTable.Vector3ToPoint(transform.position);
         _current = Point.Clamp(_current, min, max);
     }
 
     private void OnMouseDrag()
     {
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Point point = _table.Vector3ToPoint(worldPosition);
+        Point point = TargetTable.Vector3ToPoint(worldPosition);
         point = Point.Clamp(point, min, max);
 
         if (point != _current)
         {
-            _table.ScrollUnit(_current, point);
+            GameLogic.Instance.ScrollUnit(_current, point);
             _current = point;
         }
 

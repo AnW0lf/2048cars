@@ -45,7 +45,6 @@ public class DropDownWindow : MonoBehaviour
     {
         Vector2 pos = _window.anchoredPosition;
         pos.y = _visible ? 0f : Screen.height;
-        print(pos);
         _window.anchoredPosition = pos;
     }
 }
