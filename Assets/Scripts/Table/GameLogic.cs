@@ -10,19 +10,22 @@ public class GameLogic : MonoBehaviour
 
     [SerializeField] private GameObject _tablePrefab = null;
     [SerializeField] private GameObject _unitPrefab = null;
-    [Space(20)]
-    [SerializeField] private int _minCost = 1;
-    [SerializeField] private int _maxCost = 4;
+    [SerializeField] private TableInfo[] _tables;
 
     private Table _table;
+    private TableInfo _tableInfo;
 
     public UnityAction<Unit> OnUnitInstantiated { get; set; } = null;
     public UnityAction<Unit> OnUnitScrolled { get; set; } = null;
     public UnityAction<Unit> OnUnitLaunched { get; set; } = null;
     public UnityAction OnGameOver { get; set; } = null;
+    public UnityAction OnGameWin { get; set; } = null;
+    public UnityAction<TableInfo> OnTableInstantiated { get; set; } = null;
 
     public int FieldSize { get => _table.FieldSize; }
     public int TableSize { get => _table.TableSize; }
+
+    public TableInfo GetTableInfo(int id) => _tables[Mathf.Clamp(id, 0, _tables.Length - 1)];
 
     private void Awake()
     {
@@ -33,15 +36,43 @@ public class GameLogic : MonoBehaviour
     private void Start()
     {
         InstantiateTable();
-        InstantiateUnit();
+    }
+
+    private IEnumerator MoveFromTo(Vector3 from, Vector3 to, float duration, Transform target, UnityAction onComplete)
+    {
+        float timer = 0f;
+        target.position = from;
+
+        while(timer <= duration)
+        {
+            timer += Time.deltaTime;
+            target.position = Vector3.Lerp(from, to, timer / duration);
+            yield return null;
+        }
+
+        onComplete?.Invoke();
     }
 
     private void InstantiateTable()
     {
-        if (_table != null) Destroy(_table);
+        _tableInfo = _tables[Player.Instance.TableNumber];
         _table = Instantiate(_tablePrefab).GetComponent<Table>();
-        _table.FieldSize = 6;
+        _table.FieldSize = _tableInfo.fieldSize;
         _table.Init();
+
+        Vector3 from = Vector3.right * 20f, to = Vector3.zero;
+        UnityAction onComplete = InstantiateUnit;
+
+        OnTableInstantiated?.Invoke(_tableInfo);
+
+        StartCoroutine(MoveFromTo(from, to, 1.5f, _table.transform, onComplete));
+    }
+
+    private void DestroyTable(Table table)
+    {
+        Vector3 from = Vector3.zero, to = Vector3.left * 20f;
+        UnityAction onComplete = () => { Destroy(table.gameObject); };
+        StartCoroutine(MoveFromTo(from, to, 1.5f, table.transform, onComplete));
     }
 
     private void InstantiateUnit()
@@ -49,7 +80,6 @@ public class GameLogic : MonoBehaviour
         int minX = (_table.TableSize - _table.FieldSize) / 2;
         int maxX = (_table.TableSize + _table.FieldSize) / 2;
         Point point = new Point(Random.Range(minX, maxX), 1);
-        print($"minX = {minX} maxX = {maxX} point = {point}");
         Unit unit = Instantiate(_unitPrefab, _table.transform).GetComponent<Unit>();
         unit.TargetTable = _table;
         unit.transform.position = _table.PointToVector3(point);
@@ -59,7 +89,7 @@ public class GameLogic : MonoBehaviour
         _table[point + Point.down] = unit;
 
         unit.onEndScrolling += MoveUnit;
-        unit.Cost = Random.Range(_minCost, _maxCost + 1);
+        unit.Cost = Random.Range(_tableInfo.minCost, _tableInfo.maxCost + 1);
         int minDistance = (_table.TableSize - _table.FieldSize) / 2;
         int maxDistance = _table.TableSize - _table.FieldSize + 1;
         unit.Distance = Random.Range(minDistance, maxDistance);
@@ -111,7 +141,7 @@ public class GameLogic : MonoBehaviour
 
         if (unit.Distance == 0)
         {
-            Next(point);
+            NextStep(point);
         }
         else
         {
@@ -123,7 +153,7 @@ public class GameLogic : MonoBehaviour
                 unit.Distance--;
                 unit.onEndMove += PushUnit;
             }
-            else Next(point);
+            else NextStep(point);
         }
     }
 
@@ -272,18 +302,34 @@ public class GameLogic : MonoBehaviour
         return true;
     }
 
-    private void Next(Point point)
+    private void NextStep(Point point)
     {
+        _table[point].onEndMove = null;
         if (GameOver)
         {
             //TODO
             OnGameOver?.Invoke();
         }
+        else if(GameWin)
+        {
+            OnGameWin?.Invoke();
+        }
         else
         {
-            _table[point].onEndMove = null;
             StartCoroutine(_table.Rotate(InstantiateUnit));
         }
+    }
+
+    public void NextTable()
+    {
+        Player.Instance.TableNumber = (Player.Instance.TableNumber + 1) % _tables.Length;
+        ReloadTable();
+    }
+
+    public void ReloadTable()
+    {
+        DestroyTable(_table);
+        InstantiateTable();
     }
 
     private bool GameOver
@@ -297,6 +343,20 @@ public class GameLogic : MonoBehaviour
                 int x = i % _table.TableSize, y = i / _table.TableSize;
                 if (_table[x, y] != null && (x < min || x >= max || y < min || y >= max))
                     return true;
+            }
+            return false;
+        }
+    }
+
+    private bool GameWin
+    {
+        get
+        {
+            for(int i = 0; i < _table.Length; i++)
+            {
+                int x = i % _table.TableSize, y = i / _table.TableSize;
+                Unit unit = _table[x, y];
+                if (unit != null && unit.Cost >= _tableInfo.winCost) return true;
             }
             return false;
         }

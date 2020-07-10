@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
-public class DropDownWindow : MonoBehaviour
+public class DropDownWindow : MonoBehaviour, IQueuedWindow
 {
+    [SerializeField] protected WindowQueue _windowQueue;
     [SerializeField] protected bool _visible;
     [SerializeField] protected RectTransform _window = null;
     [SerializeField] protected GameObject _background = null;
@@ -47,4 +49,27 @@ public class DropDownWindow : MonoBehaviour
         pos.y = _visible ? 0f : Screen.height;
         _window.anchoredPosition = pos;
     }
+
+    public void Request()
+    {
+        _windowQueue.Add(this);
+    }
+
+    public void Open()
+    {
+        Visible = true;
+    }
+
+    public void Next()
+    {
+        Visible = false;
+        _windowQueue.Close();
+    }
+}
+
+public interface IQueuedWindow
+{
+    void Request();
+    void Open();
+    void Next();
 }

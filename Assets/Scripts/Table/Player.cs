@@ -14,14 +14,45 @@ public class Player : MonoBehaviour
     public UnityAction<int> onChangeMoney = null;
     public UnityAction<int> onChangeExperience = null;
     public UnityAction<int> onChangeLevel = null;
+    public UnityAction<int> onChangeTableNumber = null;
 
     public int Level
     {
-        get => _resources.GetResourceValue(ResourceId.LEVEL);
+        get
+        {
+            string key = "Level";
+            if (!PlayerPrefs.HasKey(key))
+                PlayerPrefs.SetInt(key, 1);
+            return PlayerPrefs.GetInt(key);
+        }
         set
         {
-            _resources.SetResourceValue(ResourceId.LEVEL, value);
-            onChangeLevel?.Invoke(value);
+            if (Level != value)
+            {
+                string key = "Level";
+                PlayerPrefs.SetInt(key, value);
+                onChangeLevel?.Invoke(value);
+            }
+        }
+    }
+
+    public int TableNumber
+    {
+        get
+        {
+            string key = "TableNumber";
+            if (!PlayerPrefs.HasKey(key))
+                PlayerPrefs.SetInt(key, 0);
+            return PlayerPrefs.GetInt(key);
+        }
+        set
+        {
+            if (TableNumber != value)
+            {
+                string key = "TableNumber";
+                PlayerPrefs.SetInt(key, value);
+                onChangeTableNumber?.Invoke(value);
+            }
         }
     }
 
@@ -56,8 +87,6 @@ public class Player : MonoBehaviour
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
         else Instance = this;
-
-        if (Level == 0) Level = 1;
     }
 
     private void OnApplicationQuit()
@@ -124,6 +153,5 @@ public class ResourcesData
 public enum ResourceId
 {
     MONEY,
-    EXPERIENCE,
-    LEVEL
+    EXPERIENCE
 }

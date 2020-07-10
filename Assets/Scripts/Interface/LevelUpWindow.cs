@@ -23,7 +23,7 @@ public class LevelUpWindow : DropDownWindow
 
     public void LevelUp(int level)
     {
-        Visible = true;
+        Request();
         _levelReward = Player.Instance.GetLevel(level - 1).moneyReward;
         _levelText.text = $" New Level {level}";
         _rewardText.text = $" Money reward\n{_levelReward}$";
@@ -31,7 +31,7 @@ public class LevelUpWindow : DropDownWindow
 
     public void Rewarding()
     {
-        Visible = false;
+        Next();
         MoneyCounter moneyCounter = FindObjectOfType<MoneyCounter>();
         moneyCounter.ChangeCounter(Player.Instance.Money + _levelReward, _rewardText.transform.position);
     }
