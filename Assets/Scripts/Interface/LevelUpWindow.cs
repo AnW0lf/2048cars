@@ -26,7 +26,7 @@ public class LevelUpWindow : DropDownWindow
         Request();
         _levelReward = Player.Instance.GetLevel(level - 1).moneyReward;
         _levelText.text = $" New Level {level}";
-        _rewardText.text = $" Money reward\n{_levelReward}$";
+        _rewardText.text = $"{_levelReward}";
     }
 
     public void Rewarding()

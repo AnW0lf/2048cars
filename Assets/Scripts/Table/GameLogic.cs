@@ -66,7 +66,7 @@ public class GameLogic : MonoBehaviour
 
         OnTableInstantiated?.Invoke(_tableInfo);
 
-        StartCoroutine(MoveFromTo(from, to, 1.5f, _table.transform, onComplete));
+        StartCoroutine(MoveFromTo(from, to, 0.5f, _table.transform, onComplete));
     }
 
     private void DestroyTable(Table table)

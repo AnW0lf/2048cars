@@ -9,7 +9,7 @@ public class DropDownWindow : MonoBehaviour, IQueuedWindow
     [SerializeField] protected bool _visible;
     [SerializeField] protected RectTransform _window = null;
     [SerializeField] protected GameObject _background = null;
-    [SerializeField] protected float _duration = 0.5f;
+    [SerializeField] protected float _duration = 0f;
 
     private Coroutine _coroutine = null;
     public bool Visible
