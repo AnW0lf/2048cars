@@ -38,7 +38,7 @@ public class Table : MonoBehaviour
         _turnCounter++;
         float end = _turnCounter * 90f;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
 
         Unit[,] newCells = new Unit[TableSize, TableSize];
         for (int i = 0; i < _cells.Length; i++)
@@ -49,7 +49,7 @@ public class Table : MonoBehaviour
         }
         _cells = newCells;
 
-        float timer = 0f, duration = 1f;
+        float timer = 0f, duration = 0.5f;
         while (timer < duration)
         {
             timer += Time.deltaTime;
