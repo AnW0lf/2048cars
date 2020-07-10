@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 public class Unit : MonoBehaviour
 {
-    [SerializeField] private float _scrollSpeed;
-    [SerializeField] private float _moveSpeed;
-    [SerializeField] private float _pushSpeed;
+    [SerializeField] private float _scrollSpeed = 30f;
+    [SerializeField] private float _moveSpeed = 15f;
+    [SerializeField] private float _pushSpeed = 5f;
 
     public int Cost
     {

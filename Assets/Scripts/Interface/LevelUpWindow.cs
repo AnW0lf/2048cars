@@ -4,8 +4,8 @@ using TMPro;
 
 public class LevelUpWindow : DropDownWindow
 {
-    [SerializeField] private TextMeshProUGUI _levelText;
-    [SerializeField] private TextMeshProUGUI _rewardText;
+    [SerializeField] private TextMeshProUGUI _levelText = null;
+    [SerializeField] private TextMeshProUGUI _rewardText = null;
 
     private int _levelReward = 0;
 

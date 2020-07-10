@@ -5,9 +5,9 @@ using System;
 [RequireComponent(typeof(Unit))]
 public class UnitSkin : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer _renderer;
-    [SerializeField] private TextMesh _text;
-    [SerializeField] private Sprite[] skins;
+    [SerializeField] private SpriteRenderer _renderer = null;
+    [SerializeField] private TextMesh _text = null;
+    [SerializeField] private Sprite[] skins = null;
     private Unit _unit;
 
     private void Awake()

@@ -4,8 +4,8 @@ using TMPro;
 
 public class WinWindow : DropDownWindow
 {
-    [SerializeField] private TextMeshProUGUI _tableText;
-    [SerializeField] private TextMeshProUGUI _rewardText;
+    [SerializeField] private TextMeshProUGUI _tableText = null;
+    [SerializeField] private TextMeshProUGUI _rewardText = null;
 
     private int _tableReward = 0;
 

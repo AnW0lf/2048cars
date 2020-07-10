@@ -10,7 +10,7 @@ public class GameLogic : MonoBehaviour
 
     [SerializeField] private GameObject _tablePrefab = null;
     [SerializeField] private GameObject _unitPrefab = null;
-    [SerializeField] private TableInfo[] _tables;
+    [SerializeField] private TableInfo[] _tables = null;
 
     private Table _table;
     private TableInfo _tableInfo;

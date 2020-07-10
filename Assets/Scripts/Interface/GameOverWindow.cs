@@ -4,8 +4,8 @@ using TMPro;
 
 public class GameOverWindow : DropDownWindow
 {
-    [SerializeField] private TextMeshProUGUI _headerText;
-    [SerializeField] private TextMeshProUGUI _descriptionText;
+    [SerializeField] private TextMeshProUGUI _headerText = null;
+    [SerializeField] private TextMeshProUGUI _descriptionText = null;
 
     private void Start()
     {
