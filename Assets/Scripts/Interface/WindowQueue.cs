@@ -7,6 +7,8 @@ public class WindowQueue : MonoBehaviour, IWindowQueue
     private Queue<IQueuedWindow> windows = new Queue<IQueuedWindow>();
     private IQueuedWindow current = null;
 
+    public bool IsEmpty => windows.Count == 0 && current == null;
+
     public void Add(IQueuedWindow window)
     {
         windows.Enqueue(window);

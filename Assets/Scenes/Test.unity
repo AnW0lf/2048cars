@@ -743,6 +743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4414347ca306845a97c6bd3e96dd3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _windowQueue: {fileID: 962305164}
   _tablePrefab: {fileID: 2665322736729536393, guid: d6aa61efc73049d4dadbfe26133628da,
     type: 3}
   _unitPrefab: {fileID: 7216375995287318710, guid: dc66e691e3c457442ada22c11deddfa4,

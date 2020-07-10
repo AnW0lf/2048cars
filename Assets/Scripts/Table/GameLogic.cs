@@ -8,6 +8,7 @@ public class GameLogic : MonoBehaviour
 {
     public static GameLogic Instance { get; private set; }
 
+    [SerializeField] private WindowQueue _windowQueue = null;
     [SerializeField] private GameObject _tablePrefab = null;
     [SerializeField] private GameObject _unitPrefab = null;
     [SerializeField] private TableInfo[] _tables = null;
@@ -43,7 +44,7 @@ public class GameLogic : MonoBehaviour
         float timer = 0f;
         target.position = from;
 
-        while(timer <= duration)
+        while (timer <= duration)
         {
             timer += Time.deltaTime;
             target.position = Vector3.Lerp(from, to, timer / duration);
@@ -305,19 +306,29 @@ public class GameLogic : MonoBehaviour
     private void NextStep(Point point)
     {
         _table[point].onEndMove = null;
+
         if (GameOver)
         {
-            //TODO
             OnGameOver?.Invoke();
+            return;
         }
-        else if(GameWin)
-        {
-            OnGameWin?.Invoke();
-        }
-        else
-        {
-            StartCoroutine(_table.Rotate(InstantiateUnit));
-        }
+
+        Player.Instance.Experience++;
+
+        StartCoroutine(WaitWhile(
+            () => !_windowQueue.IsEmpty,
+            () =>
+            {
+                if (GameWin) OnGameWin?.Invoke();
+                else StartCoroutine(_table.Rotate(InstantiateUnit));
+            }));
+    }
+
+    private IEnumerator WaitWhile(Func<bool> predicate, UnityAction onComplete)
+    {
+        WaitWhile wait = new WaitWhile(predicate);
+        yield return wait;
+        onComplete?.Invoke();
     }
 
     public void NextTable()
@@ -352,7 +363,7 @@ public class GameLogic : MonoBehaviour
     {
         get
         {
-            for(int i = 0; i < _table.Length; i++)
+            for (int i = 0; i < _table.Length; i++)
             {
                 int x = i % _table.TableSize, y = i / _table.TableSize;
                 Unit unit = _table[x, y];
