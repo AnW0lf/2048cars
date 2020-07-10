@@ -7,8 +7,8 @@ using System;
 public class LevelProgressbar : MonoBehaviour
 {
     [SerializeField] private Image _filler = null;
-    [SerializeField] private TextMeshProUGUI _levelNumber = null;
-    [SerializeField] private TextMeshProUGUI _moneyReward = null;
+    [SerializeField] private TextMeshProUGUI _currentLevelCounter = null;
+    [SerializeField] private TextMeshProUGUI _nextLevelCounter = null;
 
     public float Progress
     {
@@ -58,8 +58,8 @@ public class LevelProgressbar : MonoBehaviour
     {
         _filler.fillAmount = 0f;
         Progress = (float)experience / Player.Instance.GetLevel(level).experience;
-        _levelNumber.text = level.ToString();
-        _moneyReward.text = Player.Instance.GetLevel(level).moneyReward.ToString();
+        _currentLevelCounter.text = level.ToString();
+        _nextLevelCounter.text = (level + 1).ToString();
     }
 
     private void SetExperience(int value)

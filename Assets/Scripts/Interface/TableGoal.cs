@@ -7,6 +7,7 @@ public class TableGoal : MonoBehaviour
 {
     [SerializeField] private Image _shadow = null;
     [SerializeField] private TextMeshProUGUI _label = null;
+    [SerializeField] private TextMeshProUGUI _cost = null;
     [SerializeField] private Sprite[] _skins = null;
 
     private TableInfo _info;
@@ -18,12 +19,12 @@ public class TableGoal : MonoBehaviour
             _info = value;
             _shadow.color = Color.black;
             _shadow.sprite = _skins[Mathf.Clamp(_info.winCost - 1, 0, _skins.Length - 1)];
-            _label.text = $"Table {Player.Instance.TableNumber + 1} Goal";
-            print("Set new info");
+            _label.text = $"Unlock";
+            _cost.text = Mathf.Pow(2f, _info.winCost).ToString();
         }
     }
 
-    private void Start()
+    private void Awake()
     {
         GameLogic.Instance.OnTableInstantiated += SetInfo;
     }
