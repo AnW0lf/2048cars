@@ -120,6 +120,8 @@ public class Unit : MonoBehaviour
     {
         onEndScrolling?.Invoke(_current);
         GetComponent<Collider2D>().enabled = false;
+
+        Player.Instance.Experience++;
     }
 
     private void OnDisable()

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e145274b3d4ff5f46b3635ffcc004a7c, type: 3}
-  m_Name: Table_1
+  m_Name: Table_3
   m_EditorClassIdentifier: 
-  minCost: 1
-  maxCost: 3
-  winCost: 7
-  moneyReward: 100
+  minCost: 3
+  maxCost: 5
+  winCost: 9
+  moneyReward: 200
   fieldSize: 6

@@ -25,8 +25,8 @@ public class WinWindow : DropDownWindow
     {
         Request();
         _tableReward = GameLogic.Instance.GetTableInfo(Player.Instance.TableNumber).moneyReward;
-        _tableText.text = $"Table {Player.Instance.TableNumber + 1} Complete";
-        _rewardText.text = $" Money reward\n{_tableReward}$";
+        _tableText.text = $"Table {Player.Instance.TableNumber + 1}\nComplete!";
+        _rewardText.text = $"{_tableReward}";
     }
 
     public void Rewarding()

@@ -22,8 +22,8 @@ public class GameOverWindow : DropDownWindow
     public void Win()
     {
         Request();
-        _headerText.text = $"GAme Over";
-        _descriptionText.text = $"Tap to\nReload table";
+        //_headerText.text = $"GAme Over";
+        //_descriptionText.text = $"Tap to\nReload table";
     }
 
     public void Rewarding()

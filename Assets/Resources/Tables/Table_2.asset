@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Table_2
   m_EditorClassIdentifier: 
   minCost: 2
-  maxCost: 5
-  winCost: 7
-  moneyReward: 50
+  maxCost: 4
+  winCost: 8
+  moneyReward: 150
   fieldSize: 6
