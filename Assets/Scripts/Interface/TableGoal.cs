@@ -19,7 +19,7 @@ public class TableGoal : MonoBehaviour
             _info = value;
             _shadow.color = Color.black;
             _shadow.sprite = _skins[Mathf.Clamp(_info.winCost - 1, 0, _skins.Length - 1)];
-            _label.text = $"Unlock";
+            //_label.text = $"Unlock";
             _cost.text = Mathf.Pow(2f, _info.winCost).ToString();
         }
     }
