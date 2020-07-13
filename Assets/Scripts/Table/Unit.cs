@@ -25,6 +25,7 @@ public class Unit : MonoBehaviour
     private int _cost;
 
     public UnityAction<int> onCostChanged = null;
+    public UnityAction<Unit> onClick = null;
 
     public void MoveTo(Vector3 pos, MoveMode mode)
     {
@@ -100,6 +101,7 @@ public class Unit : MonoBehaviour
     {
         _current = TargetTable.Vector3ToPoint(transform.position);
         _current = Point.Clamp(_current, min, max);
+        onClick?.Invoke(this);
     }
 
     private void OnMouseDrag()
