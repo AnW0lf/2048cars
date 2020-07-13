@@ -267,7 +267,7 @@ MonoBehaviour:
   skins:
   - {fileID: 21300000, guid: 61acc57a25e5bd14599d5a0de1352786, type: 3}
   - {fileID: 21300000, guid: c696c061432167545bea53e85b6fc137, type: 3}
-  - {fileID: 21300000, guid: 5ab660822dbc0a84da55e579fefe836f, type: 3}
+  - {fileID: 21300000, guid: 5a06bf09469694b499f6d5bba6723388, type: 3}
   - {fileID: 21300000, guid: 47ead43d28434e342aed791fabea3723, type: 3}
   - {fileID: 21300000, guid: 022f53650ba3b674cb9aee2f1a328497, type: 3}
   - {fileID: 21300000, guid: 18372fef85d3f7a46a2e46e429ad5ed5, type: 3}
