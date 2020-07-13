@@ -22,6 +22,7 @@ public class GameLogic : MonoBehaviour
     public UnityAction OnGameOver { get; set; } = null;
     public UnityAction OnGameWin { get; set; } = null;
     public UnityAction<TableInfo> OnTableInstantiated { get; set; } = null;
+    public UnityAction<Unit> OnMerge { get; set; } = null;
 
     public int FieldSize { get => _table.FieldSize; }
     public int TableSize { get => _table.TableSize; }
@@ -83,8 +84,9 @@ public class GameLogic : MonoBehaviour
         Point point = new Point(Random.Range(minX, maxX), 1);
         Unit unit = Instantiate(_unitPrefab, _table.transform).GetComponent<Unit>();
         unit.TargetTable = _table;
-        unit.transform.position = _table.PointToVector3(point);
+        unit.transform.position = _table.PointToVector3(point) + Vector3.down * 4f;
         unit.transform.eulerAngles = Vector3.zero;
+        unit.MoveTo(_table.PointToVector3(point), MoveMode.SCROLL);
 
         _table[point] = unit;
         _table[point + Point.down] = unit;
@@ -300,6 +302,8 @@ public class GameLogic : MonoBehaviour
         second.Merge();
         first.Cost++;
 
+        OnMerge?.Invoke(first);
+
         return true;
     }
 
@@ -367,7 +371,11 @@ public class GameLogic : MonoBehaviour
             {
                 int x = i % _table.TableSize, y = i / _table.TableSize;
                 Unit unit = _table[x, y];
-                if (unit != null && unit.Cost >= _tableInfo.winCost) return true;
+                if (unit != null &&
+                    unit.Cost >= _tableInfo.winCostMin &&
+                    unit.Cost >= _tableInfo.winCostMiddle &&
+                    unit.Cost >= _tableInfo.winCostMax)
+                    return true;
             }
             return false;
         }

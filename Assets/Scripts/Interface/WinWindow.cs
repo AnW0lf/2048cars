@@ -2,7 +2,7 @@
 using System.Collections;
 using TMPro;
 
-public class WinWindow : DropDownWindow
+public class WinWindow : ScalledWindow
 {
     [SerializeField] private TextMeshProUGUI _tableText = null;
     [SerializeField] private TextMeshProUGUI _rewardText = null;
@@ -29,8 +29,15 @@ public class WinWindow : DropDownWindow
         _rewardText.text = $"{_tableReward}";
     }
 
-    public void Rewarding()
+    public void Click()
     {
+        StartCoroutine(Closing());
+    }
+
+    private IEnumerator Closing()
+    {
+        Close();
+        yield return new WaitForSeconds(_duration);
         Next();
         MoneyCounter moneyCounter = FindObjectOfType<MoneyCounter>();
         moneyCounter.ChangeCounter(Player.Instance.Money + _tableReward, _rewardText.transform.position);

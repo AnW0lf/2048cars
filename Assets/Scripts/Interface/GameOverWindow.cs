@@ -2,32 +2,34 @@
 using System.Collections;
 using TMPro;
 
-public class GameOverWindow : DropDownWindow
+public class GameOverWindow : ScalledWindow
 {
-    [SerializeField] private TextMeshProUGUI _headerText = null;
-    [SerializeField] private TextMeshProUGUI _descriptionText = null;
-
     private void Start()
     {
-        GameLogic.Instance.OnGameOver += Win;
+        GameLogic.Instance.OnGameOver += GameOver;
 
         Init();
     }
 
     private void OnDisable()
     {
-        GameLogic.Instance.OnGameOver -= Win;
+        GameLogic.Instance.OnGameOver -= GameOver;
     }
 
-    public void Win()
+    public void GameOver()
     {
         Request();
-        //_headerText.text = $"GAme Over";
-        //_descriptionText.text = $"Tap to\nReload table";
     }
 
-    public void Rewarding()
+    public void Click()
     {
+        StartCoroutine(Closing());
+    }
+
+    private IEnumerator Closing()
+    {
+        Close();
+        yield return new WaitForSeconds(_duration);
         Next();
         GameLogic.Instance.ReloadTable();
     }

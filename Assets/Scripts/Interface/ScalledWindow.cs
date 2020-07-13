@@ -2,8 +2,9 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
-public class DropDownWindow : MonoBehaviour, IQueuedWindow
+public class ScalledWindow : MonoBehaviour, IQueuedWindow
 {
     [SerializeField] protected WindowQueue _windowQueue;
     [SerializeField] protected bool _visible;
@@ -12,6 +13,10 @@ public class DropDownWindow : MonoBehaviour, IQueuedWindow
     [SerializeField] protected float _duration = 0f;
 
     private Coroutine _coroutine = null;
+
+    public UnityAction OnOpened { get; set; }
+    public UnityAction OnClosed { get; set; }
+
     public bool Visible
     {
         get => _visible;
@@ -21,33 +26,35 @@ public class DropDownWindow : MonoBehaviour, IQueuedWindow
             {
                 _visible = value;
                 if (_coroutine != null) StopCoroutine(_coroutine);
-                _coroutine = StartCoroutine(Move());
-
-                _background.SetActive(_visible);
+                _coroutine = StartCoroutine(scalling());
             }
         }
     }
 
-    private IEnumerator Move()
+    private IEnumerator scalling()
     {
-        float start = _window.anchoredPosition.y, end = _visible ? 0f : Screen.height;
-        float timer = (1f - Mathf.Abs(start - end) / Screen.height) * _duration;
+        if(_visible) _background.SetActive(true);
+
+        Vector3 start = _window.localScale, end = _visible ? Vector3.one : Vector3.zero;
+        float timer = (Mathf.Sqrt(3) - Vector3.Distance(start, end)) * _duration;
+        start = _visible ? Vector3.zero : Vector3.one;
         while (timer <= _duration)
         {
             timer += Time.deltaTime;
-            Vector2 pos = _window.anchoredPosition;
-            pos.y = Mathf.Lerp(start, end, timer / _duration);
-            _window.anchoredPosition = pos;
+            _window.localScale = Vector3.Lerp(start, end, timer / _duration);
             yield return null;
         }
+
+        if (!_visible) _background.SetActive(false);
         _coroutine = null;
+
+        if (_visible) OnOpened?.Invoke();
+        else OnClosed?.Invoke();
     }
 
     protected void Init()
     {
-        Vector2 pos = _window.anchoredPosition;
-        pos.y = _visible ? 0f : Screen.height;
-        _window.anchoredPosition = pos;
+        _window.localScale = _visible ? Vector3.one : Vector3.zero;
     }
 
     public void Request()
@@ -60,9 +67,13 @@ public class DropDownWindow : MonoBehaviour, IQueuedWindow
         Visible = true;
     }
 
-    public void Next()
+    public void Close()
     {
         Visible = false;
+    }
+
+    public void Next()
+    {
         _windowQueue.Close();
     }
 }
@@ -71,5 +82,6 @@ public interface IQueuedWindow
 {
     void Request();
     void Open();
+    void Close();
     void Next();
 }
