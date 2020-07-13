@@ -53,7 +53,7 @@ public class TableGoal : MonoBehaviour
     {
         foreach (GoalIcon goal in goals)
         {
-            if (goal.Cost <= unit.Cost)
+            if (goal.Cost <= unit.Cost && !goal.IsUnlocked)
             {
                 yield return new WaitForSeconds(0.8f);
                 goal.IsUnlocked = true;
@@ -80,8 +80,11 @@ public class TableGoal : MonoBehaviour
         Destroy(effect);
     }
 
-    public void WinEffect()
+    public void WinEffect() => StartCoroutine(WinEffectCoroutine());
+
+    private IEnumerator WinEffectCoroutine()
     {
+        yield return new WaitForSeconds(0.8f);
         foreach (GoalIcon goal in goals) InstantiateEffect(goal.transform);
     }
 
