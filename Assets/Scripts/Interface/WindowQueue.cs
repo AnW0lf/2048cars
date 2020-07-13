@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class WindowQueue : MonoBehaviour, IWindowQueue
 {
+    [SerializeField] private BoxCollider2D _blockRaycast = null;
     private Queue<IQueuedWindow> windows = new Queue<IQueuedWindow>();
     private IQueuedWindow current = null;
 
@@ -17,12 +18,14 @@ public class WindowQueue : MonoBehaviour, IWindowQueue
 
     public void Open()
     {
+        _blockRaycast.enabled = true;
         current = windows.Dequeue();
         current.Open();
     }
 
     public void Close()
     {
+        _blockRaycast.enabled = false;
         current = null;
         Next();
     }

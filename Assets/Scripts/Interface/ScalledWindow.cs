@@ -11,6 +11,8 @@ public class ScalledWindow : MonoBehaviour, IQueuedWindow
     [SerializeField] protected RectTransform _window = null;
     [SerializeField] protected GameObject _background = null;
     [SerializeField] protected float _duration = 0f;
+    [SerializeField] protected float _openDelay = 0f;
+    [SerializeField] protected float _closeDelay = 0f;
 
     private Coroutine _coroutine = null;
 
@@ -33,7 +35,12 @@ public class ScalledWindow : MonoBehaviour, IQueuedWindow
 
     private IEnumerator scalling()
     {
-        if(_visible) _background.SetActive(true);
+        if (_visible)
+        {
+            yield return new WaitForSeconds(_openDelay);
+            _background.SetActive(true);
+        }
+        else yield return new WaitForSeconds(_closeDelay);
 
         Vector3 start = _window.localScale, end = _visible ? Vector3.one : Vector3.zero;
         float timer = (Mathf.Sqrt(3) - Vector3.Distance(start, end)) * _duration;

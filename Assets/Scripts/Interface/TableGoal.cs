@@ -44,6 +44,7 @@ public class TableGoal : MonoBehaviour
     {
         GameLogic.Instance.OnTableInstantiated += SetInfo;
         GameLogic.Instance.OnMerge += UpdateGoals;
+        GameLogic.Instance.OnGameWin += WinEffect;
     }
 
     private void UpdateGoals(Unit unit) => StartCoroutine(UpdateGoalsCoroutine(unit));
@@ -64,6 +65,7 @@ public class TableGoal : MonoBehaviour
     {
         GameLogic.Instance.OnTableInstantiated -= SetInfo;
         GameLogic.Instance.OnMerge -= UpdateGoals;
+        GameLogic.Instance.OnGameWin -= WinEffect;
         foreach (GoalIcon goal in goals) goal.OnUnlock -= InstantiateEffect;
     }
 
