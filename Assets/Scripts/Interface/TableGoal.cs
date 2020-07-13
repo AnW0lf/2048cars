@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 public class TableGoal : MonoBehaviour
 {
-    [SerializeField] private GameObject effectPrefab = null;
+    [SerializeField] private TextMeshProUGUI _label = null;
     [SerializeField] private Image _shadowMin = null;
     [SerializeField] private Image _shadowMiddle = null;
     [SerializeField] private Image _shadowMax = null;
@@ -17,6 +17,7 @@ public class TableGoal : MonoBehaviour
     [SerializeField] private Sprite[] _skins = null;
 
     private GoalIcon[] goals;
+    private int _stage = 1;
 
     private TableInfo _info;
     public TableInfo Info
@@ -30,11 +31,17 @@ public class TableGoal : MonoBehaviour
             goals[0] = new GoalIcon(_shadowMin, _costMin);
             goals[1] = new GoalIcon(_shadowMiddle, _costMiddle);
             goals[2] = new GoalIcon(_shadowMax, _costMax);
-            foreach (GoalIcon goal in goals) goal.OnUnlock += InstantiateEffect;
+            foreach (GoalIcon goal in goals)
+            {
+                goal.color = Color.black;
+                goal.OnUnlock += UnlockEffect;
+            }
 
             goals[0].SetIcon(_info.winCostMin, GetSkin(_info.winCostMin));
             goals[1].SetIcon(_info.winCostMiddle, GetSkin(_info.winCostMiddle));
             goals[2].SetIcon(_info.winCostMax, GetSkin(_info.winCostMax));
+            _stage = 1;
+            StartCoroutine(SetLabel($"Stage 1 Goals"));
         }
     }
 
@@ -51,6 +58,7 @@ public class TableGoal : MonoBehaviour
 
     private IEnumerator UpdateGoalsCoroutine(Unit unit)
     {
+        int stage = 1;
         foreach (GoalIcon goal in goals)
         {
             if (goal.Cost <= unit.Cost && !goal.IsUnlocked)
@@ -58,6 +66,13 @@ public class TableGoal : MonoBehaviour
                 yield return new WaitForSeconds(0.8f);
                 goal.IsUnlocked = true;
             }
+            if (goal.IsUnlocked) stage++;
+        }
+        if (_stage != stage)
+        {
+            _stage = stage;
+            if (stage < 4) StartCoroutine(SetLabel($"Stage {stage} Goals"));
+            else StartCoroutine(SetLabel($"Complete"));
         }
     }
 
@@ -66,18 +81,70 @@ public class TableGoal : MonoBehaviour
         GameLogic.Instance.OnTableInstantiated -= SetInfo;
         GameLogic.Instance.OnMerge -= UpdateGoals;
         GameLogic.Instance.OnGameWin -= WinEffect;
-        foreach (GoalIcon goal in goals) goal.OnUnlock -= InstantiateEffect;
+        foreach (GoalIcon goal in goals) goal.OnUnlock -= UnlockEffect;
     }
 
     private void SetInfo(TableInfo info) => Info = info;
 
-    private void InstantiateEffect(Transform container) => StartCoroutine(InstantiateEffectCoroutiner(container));
+    private void UnlockEffect(GoalIcon icon) => StartCoroutine(UnlockEffectCoroutiner(icon));
 
-    private IEnumerator InstantiateEffectCoroutiner(Transform container)
+    private IEnumerator UnlockEffectCoroutiner(GoalIcon icon)
     {
-        GameObject effect = Instantiate(effectPrefab, container);
-        yield return new WaitForSeconds(2f);
-        Destroy(effect);
+        StartCoroutine(Scaling(icon.transform, Vector3.zero, 0.3f));
+        yield return new WaitForSeconds(0.3f);
+
+        icon.color = Color.white;
+
+        StartCoroutine(Scaling(icon.transform, Vector3.one * 1.5f, 0.3f));
+        yield return new WaitForSeconds(0.3f);
+
+        StartCoroutine(Scaling(icon.transform, Vector3.one, 0.1f));
+    }
+
+    private IEnumerator Scaling(Transform target, Vector3 end, float duration)
+    {
+        Vector3 start;
+        float timer;
+        start = target.localScale;
+        timer = 0f;
+        while (timer <= duration)
+        {
+            timer += Time.deltaTime;
+            target.localScale = Vector3.Lerp(start, end, timer / duration);
+            yield return null;
+        }
+    }
+
+    private IEnumerator SetLabel(string text)
+    {
+        Vector3 start, end;
+        float timer, duration;
+
+        start = _label.transform.localScale;
+        end = Vector3.zero;
+        timer = 0f;
+        duration = 0.3f;
+
+        while (timer <= duration)
+        {
+            timer += Time.deltaTime;
+            _label.transform.localScale = Vector3.Lerp(start, end, timer / duration);
+            yield return null;
+        }
+
+        _label.text = text;
+
+        start = Vector3.zero;
+        end = Vector3.one;
+        timer = 0f;
+        duration = 0.3f;
+
+        while (timer <= duration)
+        {
+            timer += Time.deltaTime;
+            _label.transform.localScale = Vector3.Lerp(start, end, timer / duration);
+            yield return null;
+        }
     }
 
     public void WinEffect() => StartCoroutine(WinEffectCoroutine());
@@ -85,7 +152,7 @@ public class TableGoal : MonoBehaviour
     private IEnumerator WinEffectCoroutine()
     {
         yield return new WaitForSeconds(0.8f);
-        foreach (GoalIcon goal in goals) InstantiateEffect(goal.transform);
+        //foreach (GoalIcon goal in goals) UnlockEffect(goal);
     }
 
     private class GoalIcon
@@ -95,9 +162,11 @@ public class TableGoal : MonoBehaviour
         private bool _unlocked = false;
 
         public int Cost { get; private set; }
-        public UnityAction<Transform> OnUnlock { get; set; }
+        public UnityAction<GoalIcon> OnUnlock { get; set; }
 
         public Transform transform => _icon.transform;
+
+        public Color color { get => _icon.color; set => _icon.color = value; }
 
         public GoalIcon(Image icon, TextMeshProUGUI counter)
         {
@@ -118,9 +187,8 @@ public class TableGoal : MonoBehaviour
             get => _unlocked;
             set
             {
-                if (!_unlocked && value) OnUnlock?.Invoke(_icon.transform);
+                if (!_unlocked && value) OnUnlock?.Invoke(this);
                 _unlocked = value;
-                _icon.color = _unlocked ? Color.white : Color.black;
                 _counter.gameObject.SetActive(!_unlocked);
             }
         }

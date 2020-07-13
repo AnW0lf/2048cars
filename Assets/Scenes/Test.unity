@@ -1338,6 +1338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectPrefab: {fileID: 9175485208733560161, guid: aa428b41ae3aa5f4593d4c7276f61b09,
     type: 3}
+  _label: {fileID: 310957204}
   _shadowMin: {fileID: 233619455}
   _shadowMiddle: {fileID: 1299012423}
   _shadowMax: {fileID: 891012234}
