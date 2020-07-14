@@ -4,13 +4,17 @@ using System;
 
 public class ScrollTutorial : MonoBehaviour, ITutorial
 {
+    [SerializeField] private GameObject _tutorialLabel = null;
+    [SerializeField] private GameObject _tableGoals = null;
     [SerializeField] private TutorialQueue _tutorialQueue = null;
     [SerializeField] private Transform _hand = null;
     [SerializeField] private Vector2 _offset = Vector2.zero;
     [SerializeField] private float _speed = 0f;
+    [SerializeField] private GameObject[] _destroyable = null;
     private int _tableSize = 0;
     private Vector3 _startPosition = Vector3.zero;
     private readonly string _key = "ScrollTutorial";
+    private Coroutine _move = null;
 
     private bool IsComplete
     {
@@ -28,7 +32,11 @@ public class ScrollTutorial : MonoBehaviour, ITutorial
 
     private void OnEnable()
     {
-        if (IsComplete) Destroy(gameObject);
+        if (IsComplete)
+        {
+            foreach (var d in _destroyable) Destroy(d);
+            Destroy(gameObject);
+        }
         else
         {
             _tutorialQueue.Add(this);
@@ -41,11 +49,8 @@ public class ScrollTutorial : MonoBehaviour, ITutorial
 
     private void SetStartPosition(Unit unit)
     {
-        print(_tableSize);
         Point point = GameLogic.Instance.GetFirstPoint(unit);
-        print(point);
         _startPosition = new Vector3(point.X - (_tableSize - 1) / 2f, point.Y - (_tableSize - 1) / 2f - 1f);
-        print(_startPosition);
         unit.onClick += (u) => Complete();
     }
 
@@ -57,19 +62,33 @@ public class ScrollTutorial : MonoBehaviour, ITutorial
 
     public void Begin()
     {
-        StartCoroutine(MoveHand());
+        _tableGoals.transform.localScale = Vector3.zero;
+        _move = StartCoroutine(MoveHand());
     }
 
     private IEnumerator MoveHand()
     {
         yield return new WaitWhile(() => _startPosition == Vector3.zero);
+        yield return new WaitForSeconds(0.5f);
+
+        Vector3 startPos = _hand.position;
+        float timer = 0f;
+        float duration = 0.4f;
+
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            _hand.localPosition = Vector3.Lerp(startPos, _startPosition, timer / duration);
+            yield return null;
+        }
+
         _hand.position = _startPosition;
         while (true)
         {
             float start = _hand.localPosition.x;
             float end = _offset.y;
-            float timer = 0f;
-            float duration = Mathf.Abs(end - start) / _speed;
+            timer = 0f;
+            duration = Mathf.Abs(end - start) / _speed;
             while (timer < duration)
             {
                 timer += Time.deltaTime;
@@ -98,6 +117,22 @@ public class ScrollTutorial : MonoBehaviour, ITutorial
     {
         IsComplete = true;
         _tutorialQueue.Next();
+        StopCoroutine(_move);
+        StartCoroutine(Completing());
+    }
+
+    private IEnumerator Completing()
+    {
+        foreach (var d in _destroyable) Destroy(d);
+        float timer = 0f;
+        float duration = 0.5f;
+        while(timer < duration)
+        {
+            timer += Time.deltaTime;
+            _tableGoals.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, timer / duration);
+            yield return null;
+        }
+        
         Destroy(gameObject);
     }
 }
