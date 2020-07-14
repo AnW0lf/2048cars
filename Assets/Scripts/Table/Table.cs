@@ -9,7 +9,7 @@ public class Table : MonoBehaviour
     private int _turnCounter = 0;
     private Unit[,] _cells;
 
-    public int TableSize { get => _fieldSize + 8; }
+    public int TableSize { get => _fieldSize + 6; }
     public int FieldSize
     {
         get => _fieldSize;
