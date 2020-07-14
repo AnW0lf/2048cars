@@ -104,8 +104,6 @@ public class Unit : MonoBehaviour
         onClick?.Invoke(this);
     }
 
-    //useless comment
-
     private void OnMouseDrag()
     {
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);

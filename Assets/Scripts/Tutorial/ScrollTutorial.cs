@@ -26,7 +26,7 @@ public class ScrollTutorial : MonoBehaviour, ITutorial
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
         if (IsComplete) Destroy(gameObject);
         else
@@ -37,14 +37,15 @@ public class ScrollTutorial : MonoBehaviour, ITutorial
         }
     }
 
-    //useless comment
-
     private void SetTable(TableInfo tableInfo) => _tableSize = tableInfo.fieldSize + 8;
 
     private void SetStartPosition(Unit unit)
     {
+        print(_tableSize);
         Point point = GameLogic.Instance.GetFirstPoint(unit);
+        print(point);
         _startPosition = new Vector3(point.X - (_tableSize - 1) / 2f, point.Y - (_tableSize - 1) / 2f - 1f);
+        print(_startPosition);
         unit.onClick += (u) => Complete();
     }
 
