@@ -3501,7 +3501,7 @@ MonoBehaviour:
   _window: {fileID: 995307595}
   _background: {fileID: 733246239}
   _duration: 0.2
-  _openDelay: 0.5
+  _openDelay: 0.4
   _closeDelay: 0
   _levelText: {fileID: 1145027484}
   _rewardText: {fileID: 1312679302}
