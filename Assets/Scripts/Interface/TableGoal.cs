@@ -120,7 +120,7 @@ public class TableGoal : MonoBehaviour
         while (timer <= duration)
         {
             timer += Time.deltaTime;
-            _label.transform.localScale = Vector3.Lerp(start, end, timer / duration);
+            //_label.transform.localScale = Vector3.Lerp(start, end, timer / duration);
             yield return null;
         }
 
@@ -134,7 +134,7 @@ public class TableGoal : MonoBehaviour
         while (timer <= duration)
         {
             timer += Time.deltaTime;
-            _label.transform.localScale = Vector3.Lerp(start, end, timer / duration);
+            //_label.transform.localScale = Vector3.Lerp(start, end, timer / duration);
             yield return null;
         }
     }

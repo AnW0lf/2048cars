@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minCost: 4
   maxCost: 6
-  winCostMin: 7
-  winCostMiddle: 8
-  winCostMax: 9
+  winCostMin: 8
+  winCostMiddle: 9
+  winCostMax: 10
   moneyReward: 250
   fieldSize: 6

@@ -346,7 +346,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 350, y: -5}
+  m_AnchoredPosition: {x: 350, y: -40}
   m_SizeDelta: {x: 265, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &123215929
@@ -472,7 +472,7 @@ RectTransform:
   - {fileID: 1000053258}
   - {fileID: 1975256738}
   m_Father: {fileID: 962305163}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -496,7 +496,7 @@ MonoBehaviour:
   _window: {fileID: 125648213}
   _background: {fileID: 733246239}
   _duration: 0.4
-  _openDelay: 0
+  _openDelay: 1
   _closeDelay: 0
 --- !u!114 &125648215
 MonoBehaviour:
@@ -637,7 +637,7 @@ RectTransform:
   - {fileID: 11254743}
   - {fileID: 1953669011}
   m_Father: {fileID: 962305163}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -1025,7 +1025,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &401458401
 Transform:
   m_ObjectHideFlags: 0
@@ -1119,7 +1119,7 @@ RectTransform:
   m_Children:
   - {fileID: 733246240}
   m_Father: {fileID: 962305163}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1281,7 +1281,7 @@ RectTransform:
   - {fileID: 51113338}
   - {fileID: 1519585687}
   m_Father: {fileID: 962305163}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -2464,7 +2464,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -350, y: -5}
+  m_AnchoredPosition: {x: -350, y: -40}
   m_SizeDelta: {x: 265, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &759530482
@@ -2620,7 +2620,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &901736987
 Transform:
   m_ObjectHideFlags: 0
@@ -3005,13 +3005,13 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
+  - {fileID: 1778266043}
   - {fileID: 555615123}
   - {fileID: 253527325}
   - {fileID: 525932479}
   - {fileID: 995307595}
   - {fileID: 1648338651}
   - {fileID: 125648213}
-  - {fileID: 1778266043}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3087,7 +3087,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7
+  orthographic size: 7.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3477,7 +3477,7 @@ RectTransform:
   - {fileID: 123215930}
   - {fileID: 1631505837}
   m_Father: {fileID: 962305163}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3967,7 +3967,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1243650137}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2047090302}
@@ -5583,7 +5583,7 @@ RectTransform:
   - {fileID: 625783157}
   - {fileID: 1978761095}
   m_Father: {fileID: 962305163}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -5607,7 +5607,7 @@ MonoBehaviour:
   _window: {fileID: 1648338651}
   _background: {fileID: 733246239}
   _duration: 0.3
-  _openDelay: 3
+  _openDelay: 1
   _closeDelay: 0
   _tableText: {fileID: 592707162}
   _rewardText: {fileID: 994256435}
@@ -5915,12 +5915,12 @@ RectTransform:
   m_Children:
   - {fileID: 1824765845}
   m_Father: {fileID: 962305163}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -137.8}
-  m_SizeDelta: {x: 500, y: 500}
+  m_AnchoredPosition: {x: 0, y: -108}
+  m_SizeDelta: {x: 900, y: 500}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1778266044
 MonoBehaviour:
@@ -5940,9 +5940,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Tap to car
+  m_text: 'Drag & Release
 
-    to push it'
+    to park the car!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c984c842bce6b22429ce1ff4fb9dee10, type: 2}
   m_sharedMaterial: {fileID: -2791742627182152883, guid: c984c842bce6b22429ce1ff4fb9dee10,
@@ -5971,17 +5971,17 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 120
+  m_fontSizeBase: 120
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_textAlignment: 544
+  m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: -20
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -6012,9 +6012,9 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1778266044}
-    characterCount: 21
+    characterCount: 31
     spriteCount: 0
-    spaceCount: 5
+    spaceCount: 6
     wordCount: 6
     linkCount: 0
     lineCount: 2
@@ -6059,7 +6059,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1813854316
 Transform:
   m_ObjectHideFlags: 0
@@ -7006,7 +7006,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8bebb00cc38b644ba037f9a9e9915c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tutorialLabel: {fileID: 1778266042}
+  _tutorialLabel: {fileID: 0}
   _tableGoals: {fileID: 555615122}
   _tutorialQueue: {fileID: 1243650139}
   _hand: {fileID: 1696241301}
@@ -7017,7 +7017,6 @@ MonoBehaviour:
   - {fileID: 401458400}
   - {fileID: 901736986}
   - {fileID: 1813854315}
-  - {fileID: 1778266042}
 --- !u!1 &2097763714
 GameObject:
   m_ObjectHideFlags: 0

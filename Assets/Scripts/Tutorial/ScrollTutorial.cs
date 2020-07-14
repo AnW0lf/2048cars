@@ -63,7 +63,8 @@ public class ScrollTutorial : MonoBehaviour, ITutorial
 
     public void Begin()
     {
-        _tableGoals.transform.localScale = Vector3.zero;
+        //_tableGoals.transform.localScale = Vector3.zero;
+        _tableGoals.transform.localPosition = new Vector3(5000f, _tableGoals.transform.localPosition.y, _tableGoals.transform.localPosition.z);
         _move = StartCoroutine(MoveHand());
     }
 
@@ -138,15 +139,16 @@ public class ScrollTutorial : MonoBehaviour, ITutorial
 
         GameLogic.Instance.OnUnitInstantiated -= ContinueDestroying;
 
-        float timer = 0f;
-        float duration = 0.5f;
-        while(timer < duration)
-        {
-            timer += Time.deltaTime;
-            _tableGoals.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, timer / duration);
-            yield return null;
-        }
-        
+        //float timer = 0f;
+        //float duration = 0.5f;
+        //while(timer < duration)
+        //{
+        //    timer += Time.deltaTime;
+        //    _tableGoals.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, timer / duration);
+        //    yield return null;
+        //}
+        _tableGoals.transform.localPosition = new Vector3(0f, _tableGoals.transform.localPosition.y, _tableGoals.transform.localPosition.z);
+
         Destroy(gameObject);
     }
 

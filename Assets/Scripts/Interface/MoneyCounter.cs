@@ -75,7 +75,7 @@ public class MoneyCounter : MonoBehaviour
     {
         FlyingCounter flyingMoney = Instantiate(_flyingMoneyPrefab, transform).GetComponent<FlyingCounter>();
         flyingMoney.Text = (value - _value).ToString();
-        flyingMoney.Fly(start, _icon.transform.position, 0.8f);
+        flyingMoney.Fly(start, _icon.transform.position, 0.6f);
         flyingMoney.onComplete += () =>
         {
             Player.Instance.Money = value;
