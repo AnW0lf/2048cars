@@ -41,7 +41,7 @@ public class TableGoal : MonoBehaviour
             goals[1].SetIcon(_info.winCostMiddle, GetSkin(_info.winCostMiddle));
             goals[2].SetIcon(_info.winCostMax, GetSkin(_info.winCostMax));
             _stage = 1;
-            StartCoroutine(SetLabel($"Stage 1 Goals"));
+            StartCoroutine(SetLabel($"Stage {Player.Instance.TableNumber + 1} Goals"));
         }
     }
 
@@ -58,7 +58,6 @@ public class TableGoal : MonoBehaviour
 
     private IEnumerator UpdateGoalsCoroutine(Unit unit)
     {
-        int stage = 1;
         foreach (GoalIcon goal in goals)
         {
             if (goal.Cost <= unit.Cost && !goal.IsUnlocked)
@@ -66,13 +65,6 @@ public class TableGoal : MonoBehaviour
                 yield return new WaitForSeconds(0.8f);
                 goal.IsUnlocked = true;
             }
-            if (goal.IsUnlocked) stage++;
-        }
-        if (_stage != stage)
-        {
-            _stage = stage;
-            if (stage < 4) StartCoroutine(SetLabel($"Stage {stage} Goals"));
-            else StartCoroutine(SetLabel($"Complete"));
         }
     }
 
