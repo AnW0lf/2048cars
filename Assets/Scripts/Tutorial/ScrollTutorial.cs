@@ -58,6 +58,7 @@ public class ScrollTutorial : MonoBehaviour, ITutorial
     {
         GameLogic.Instance.OnTableInstantiated -= SetTable;
         GameLogic.Instance.OnUnitInstantiated -= SetStartPosition;
+        GameLogic.Instance.OnUnitInstantiated -= ContinueDestroying;
     }
 
     public void Begin()
@@ -118,12 +119,25 @@ public class ScrollTutorial : MonoBehaviour, ITutorial
         IsComplete = true;
         _tutorialQueue.Next();
         StopCoroutine(_move);
+
+        GameLogic.Instance.OnTableInstantiated -= SetTable;
+        GameLogic.Instance.OnUnitInstantiated -= SetStartPosition;
+
         StartCoroutine(Completing());
     }
+
+    private bool _continueDestroying = false;
 
     private IEnumerator Completing()
     {
         foreach (var d in _destroyable) Destroy(d);
+
+        GameLogic.Instance.OnUnitInstantiated += ContinueDestroying;
+
+        yield return new WaitUntil(() => _continueDestroying);
+
+        GameLogic.Instance.OnUnitInstantiated -= ContinueDestroying;
+
         float timer = 0f;
         float duration = 0.5f;
         while(timer < duration)
@@ -135,4 +149,6 @@ public class ScrollTutorial : MonoBehaviour, ITutorial
         
         Destroy(gameObject);
     }
+
+    private void ContinueDestroying(Unit unit) => _continueDestroying = true;
 }
