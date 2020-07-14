@@ -37,6 +37,8 @@ public class ScrollTutorial : MonoBehaviour, ITutorial
         }
     }
 
+    //useless comment
+
     private void SetTable(TableInfo tableInfo) => _tableSize = tableInfo.fieldSize + 8;
 
     private void SetStartPosition(Unit unit)
